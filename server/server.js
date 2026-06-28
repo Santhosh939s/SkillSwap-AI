@@ -77,30 +77,9 @@ wss.on('connection', (ws, req) => {
 // --- API Routes ---
 
 // Use Modular Routes
-app.use('/', authRoutes); // mounts /login
+app.use('/', authRoutes); // mounts /register and /login
 
 // Legacy Routes (To be migrated in future phases)
-app.post('/register', async (req, res) => {
-    try {
-        const { name, email, password, skillsKnown, skillsWanted, securityQuestion, securityAnswer, profilePicture } = req.body;
-        let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ msg: 'User already exists' });
-
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const hashedAnswer = await bcrypt.hash(securityAnswer.toLowerCase(), salt);
-
-        user = new User({
-            name, email, password: hashedPassword, skillsKnown, skillsWanted,
-            securityQuestion, securityAnswer: hashedAnswer, profilePicture,
-            activityLog: [{ action: 'Account created' }]
-        });
-        await user.save();
-        res.status(201).json({ msg: 'User registered successfully' });
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
 
 app.get('/api/profile', auth, async (req, res) => {
     try {

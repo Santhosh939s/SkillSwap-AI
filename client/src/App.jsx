@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import { useContext } from 'react';
 
 // Temporary placeholder for dashboard until we build it
@@ -19,6 +20,7 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/login" element={!token ? <Login /> : <Navigate to="/dashboard" />} />
+            <Route path="/register" element={!token ? <Register /> : <Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={token ? <DashboardPlaceholder /> : <Navigate to="/login" />} />
             {/* Redirect everything else to login for now in phase 1 */}
             <Route path="*" element={<Navigate to="/login" />} />
