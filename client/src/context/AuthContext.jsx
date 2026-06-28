@@ -1,0 +1,38 @@
+import { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+    const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (token) {
+            localStorage.setItem('token', token);
+            axios.defaults.headers.common['x-auth-token'] = token;
+            // Optionally, fetch user profile here to set user state
+        } else {
+            localStorage.removeItem('token');
+            delete axios.defaults.headers.common['x-auth-token'];
+            setUser(null);
+        }
+        setLoading(false);
+    }, [token]);
+
+    const login = async (email, password) => {
+        const res = await axios.post('http://localhost:3000/login', { email, password });
+        setToken(res.data.token);
+    };
+
+    const logout = () => {
+        setToken(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{ token, user, login, logout, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};

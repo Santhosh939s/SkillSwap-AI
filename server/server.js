@@ -11,6 +11,13 @@ const WebSocket = require('ws');
 const path = require('path');
 const cors = require('cors');
 
+// Import modular architecture components
+const connectDB = require('./config/db');
+const User = require('./models/User');
+const Message = require('./models/Message');
+const auth = require('./middleware/auth');
+const authRoutes = require('./routes/authRoutes');
+
 // Initialize App
 const app = express();
 const server = http.createServer(app);
@@ -21,47 +28,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '')));
+// Serve static files from parent directory where html files currently reside
+app.use(express.static(path.join(__dirname, '..')));
 
 // --- Database Connection ---
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB Atlas connected successfully.'))
-    .catch(err => console.error('MongoDB connection error:', err));
-
-// --- Mongoose Schemas ---
-const userSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    skillsKnown: [{ type: String }],
-    skillsWanted: [{ type: String }],
-    location: { lat: Number, lng: Number },
-    profilePicture: { type: String, default: 'https://via.placeholder.com/150' },
-    securityQuestion: { type: String, required: true },
-    securityAnswer: { type: String, required: true },
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    friendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    reviews: [{
-        by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        rating: Number,
-        comment: String
-    }],
-    activityLog: [{
-        action: String,
-        timestamp: { type: Date, default: Date.now }
-    }],
-    createdAt: { type: Date, default: Date.now }
-});
-
-const messageSchema = new mongoose.Schema({
-    from: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    to: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    content: { type: String, required: true },
-    timestamp: { type: Date, default: Date.now }
-});
-
-const User = mongoose.model('User', userSchema);
-const Message = mongoose.model('Message', messageSchema);
+connectDB();
 
 // --- WebSocket (Chat & Signaling) ---
 const clients = new Map();
@@ -104,18 +75,11 @@ wss.on('connection', (ws, req) => {
 });
 
 // --- API Routes ---
-const auth = (req, res, next) => {
-    const token = req.header('x-auth-token');
-    if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (e) {
-        res.status(400).json({ msg: 'Token is not valid' });
-    }
-};
 
+// Use Modular Routes
+app.use('/', authRoutes); // mounts /login
+
+// Legacy Routes (To be migrated in future phases)
 app.post('/register', async (req, res) => {
     try {
         const { name, email, password, skillsKnown, skillsWanted, securityQuestion, securityAnswer, profilePicture } = req.body;
@@ -133,22 +97,6 @@ app.post('/register', async (req, res) => {
         });
         await user.save();
         res.status(201).json({ msg: 'User registered successfully' });
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
-
-app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
-
-        const token = jwt.sign({ id: user.id, name: user.name }, JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
     } catch (err) {
         res.status(500).send('Server Error');
     }
@@ -262,7 +210,7 @@ app.get('/api/matches', auth, async (req, res) => {
 
 // --- Final Setup ---
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
