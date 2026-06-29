@@ -30,7 +30,7 @@ const AppRoutes = () => {
             <Navbar />
             <div className="flex-1">
                 <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={!token ? <Home /> : <Navigate to="/dashboard" />} />
             <Route path="/login" element={!token ? <Login /> : <Navigate to="/dashboard" />} />
             <Route path="/register" element={!token ? <Register /> : <Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
