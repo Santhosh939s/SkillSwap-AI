@@ -37,8 +37,10 @@ app.use(express.static(path.join(__dirname, '..')));
 connectDB();
 
 // --- WebSocket (Chat & Signaling) ---
-const clients = new Map();
+const clients = new Map(); // id -> ws
+const rooms = new Map();   // roomId -> Set<ws>
 app.set('wsClients', clients);
+app.set('wsRooms', rooms);
 
 wss.on('connection', (ws, req) => {
     const token = req.url.split('token=')[1];
@@ -50,6 +52,8 @@ wss.on('connection', (ws, req) => {
 
             ws.on('message', message => {
                 const data = JSON.parse(message);
+                
+                // Legacy point-to-point chat
                 if (data.type === 'chat') {
                     const recipientWs = clients.get(data.to);
                     if (recipientWs && recipientWs.readyState === WebSocket.OPEN) {
@@ -57,16 +61,63 @@ wss.on('connection', (ws, req) => {
                     }
                     Message.create({ from: decoded.id, to: data.to, content: data.content });
                 }
+                
+                // Room join
+                if (data.type === 'join-room') {
+                    const roomId = data.roomId;
+                    if (!rooms.has(roomId)) rooms.set(roomId, new Set());
+                    rooms.get(roomId).add(ws);
+                    ws.roomId = roomId; // Tag the socket
+                    
+                    // Notify others in room
+                    rooms.get(roomId).forEach(client => {
+                        if (client !== ws && client.readyState === WebSocket.OPEN) {
+                            client.send(JSON.stringify({ type: 'room-user-joined', userId: decoded.id }));
+                        }
+                    });
+                }
+                
+                // Room chat
+                if (data.type === 'room-chat') {
+                    if (ws.roomId && rooms.has(ws.roomId)) {
+                        rooms.get(ws.roomId).forEach(client => {
+                            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                                client.send(JSON.stringify(data));
+                            }
+                        });
+                    }
+                }
+                
+                // Legacy & Room WebRTC Signaling
                 if (data.type === 'webrtc-signal') {
-                    const recipientWs = clients.get(data.to);
-                    if (recipientWs && recipientWs.readyState === WebSocket.OPEN) {
-                        recipientWs.send(JSON.stringify({ type: 'webrtc-signal', from: decoded.id, signal: data.signal }));
+                    if (data.roomId && rooms.has(data.roomId)) {
+                        // Room-based signaling
+                        rooms.get(data.roomId).forEach(client => {
+                            if (client !== ws && client.readyState === WebSocket.OPEN) {
+                                client.send(JSON.stringify({ type: 'webrtc-signal', from: decoded.id, signal: data.signal }));
+                            }
+                        });
+                    } else if (data.to) {
+                        // Legacy point-to-point signaling
+                        const recipientWs = clients.get(data.to);
+                        if (recipientWs && recipientWs.readyState === WebSocket.OPEN) {
+                            recipientWs.send(JSON.stringify({ type: 'webrtc-signal', from: decoded.id, signal: data.signal }));
+                        }
                     }
                 }
             });
 
             ws.on('close', () => {
                 clients.delete(decoded.id);
+                if (ws.roomId && rooms.has(ws.roomId)) {
+                    rooms.get(ws.roomId).delete(ws);
+                    rooms.get(ws.roomId).forEach(client => {
+                        if (client.readyState === WebSocket.OPEN) {
+                            client.send(JSON.stringify({ type: 'room-user-left', userId: decoded.id }));
+                        }
+                    });
+                    if (rooms.get(ws.roomId).size === 0) rooms.delete(ws.roomId);
+                }
                 console.log(`WebSocket Client disconnected for user: ${decoded.id}`);
             });
         } catch (error) {
