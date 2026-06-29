@@ -61,8 +61,15 @@
   - Added live collaborative Shared Notes and Personal Notes functionality.
   - Built background polling in `NotificationContext` for 24h, 1h, and 15m meeting reminders.
 
+- **Phase 13: Learning Tracker (Completed)**
+  - Created `Progress`, `Goal`, and `Achievement` MongoDB schemas with strict private-by-default visibility.
+  - Built a centralized XP gamification engine (`utils/xpEngine.js`) calculating XP based on time spent, daily/weekly goals, and learning streaks.
+  - Developed `LearningTracker.jsx` featuring dynamic, animated charts using `recharts` for XP growth and Skill Distribution.
+  - Implemented the "Log Activity" modal to manually input learning sessions.
+  - Built MongoDB aggregation pipelines to calculate current streaks, total learning hours, and active skills.
+
 ## Pending Tasks
-- **Phase 13: Learning Tracker (Next)**
+- **Phase 14: Skill Assessment Engine (Next)**
 - Phases 14-20 (Advanced Enhancements)
 
 ## Folder Structure Changes

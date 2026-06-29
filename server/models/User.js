@@ -27,7 +27,13 @@ const userSchema = new mongoose.Schema({
         read: { type: Boolean, default: false },
         createdAt: { type: Date, default: Date.now }
     }],
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    // Phase 13: Learning Tracker
+    totalXP: { type: Number, default: 0 },
+    level: { type: Number, default: 1 },
+    currentStreak: { type: Number, default: 0 },
+    longestStreak: { type: Number, default: 0 },
+    lastActiveDate: { type: Date }
 });
 
 module.exports = mongoose.model('User', userSchema);
