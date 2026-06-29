@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema({
         action: String,
         timestamp: { type: Date, default: Date.now }
     }],
+    notifications: [{
+        type: { type: String }, // e.g. 'friendRequest', 'message'
+        message: String,
+        read: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now }
+    }],
     createdAt: { type: Date, default: Date.now }
 });
 

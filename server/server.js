@@ -37,6 +37,7 @@ connectDB();
 
 // --- WebSocket (Chat & Signaling) ---
 const clients = new Map();
+app.set('wsClients', clients);
 
 wss.on('connection', (ws, req) => {
     const token = req.url.split('token=')[1];

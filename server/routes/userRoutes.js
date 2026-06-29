@@ -8,5 +8,7 @@ router.get('/matches', auth, userController.getMatches);
 router.get('/users', auth, userController.getUsers);
 router.post('/friends/request/:id', auth, userController.sendFriendRequest);
 router.post('/friends/accept/:id', auth, userController.acceptFriendRequest);
+router.get('/notifications', auth, userController.getNotifications);
+router.put('/notifications/read', auth, userController.markNotificationsRead);
 
 module.exports = router;

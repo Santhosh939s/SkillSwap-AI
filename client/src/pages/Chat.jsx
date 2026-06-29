@@ -1,15 +1,16 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { NotificationContext } from '../context/NotificationContext';
 
 const Chat = () => {
     const { token } = useContext(AuthContext);
+    const { ws } = useContext(NotificationContext);
     const [friends, setFriends] = useState([]);
     const [activeFriend, setActiveFriend] = useState(null);
     const [messages, setMessages] = useState([]);
     const [inputMsg, setInputMsg] = useState('');
     const [userId, setUserId] = useState(null);
-    const ws = useRef(null);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -30,30 +31,26 @@ const Chat = () => {
     }, [token]);
 
     useEffect(() => {
-        if (!token) return;
+        if (!token || !ws) return;
 
-        // Connect to WebSocket using native WS API (backward compatible)
-        const WS_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/^http/, 'ws');
-        ws.current = new WebSocket(`${WS_URL}?token=${token}`);
-
-        ws.current.onmessage = (event) => {
+        const handleMessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'chat') {
-                // Only add if we are currently chatting with this sender
                 setMessages(prev => {
-                    // Check if message belongs to current active chat
                     if (activeFriend && (data.from === activeFriend._id || data.to === activeFriend._id)) {
                         return [...prev, data];
                     }
-                    return prev; // Ignore or show unread marker in real app
+                    return prev;
                 });
             }
         };
 
+        ws.addEventListener('message', handleMessage);
+
         return () => {
-            if (ws.current) ws.current.close();
+            ws.removeEventListener('message', handleMessage);
         };
-    }, [token, activeFriend]);
+    }, [token, activeFriend, ws]);
 
     // Fetch message history when friend is selected
     useEffect(() => {
@@ -92,7 +89,7 @@ const Chat = () => {
         setMessages(prev => [...prev, msgData]);
         
         // Send via WS
-        ws.current.send(JSON.stringify(msgData));
+        ws.send(JSON.stringify(msgData));
         setInputMsg('');
     };
 

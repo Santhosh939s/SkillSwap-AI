@@ -1,13 +1,14 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import { NotificationContext } from '../context/NotificationContext';
 
 const VideoCall = () => {
     const { token } = useContext(AuthContext);
+    const { ws } = useContext(NotificationContext);
     const [friends, setFriends] = useState([]);
     const [activeFriend, setActiveFriend] = useState(null);
     const [isCalling, setIsCalling] = useState(false);
-    const ws = useRef(null);
     const peerConnection = useRef(null);
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
@@ -29,31 +30,30 @@ const VideoCall = () => {
     }, [token]);
 
     useEffect(() => {
-        if (!token) return;
+        if (!token || !ws) return;
 
-        const WS_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/^http/, 'ws');
-        ws.current = new WebSocket(`${WS_URL}?token=${token}`);
-
-        ws.current.onmessage = async (event) => {
+        const handleMessage = async (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'webrtc-signal') {
                 handleSignalingData(data.signal);
             }
         };
 
+        ws.addEventListener('message', handleMessage);
+
         return () => {
-            if (ws.current) ws.current.close();
+            ws.removeEventListener('message', handleMessage);
             if (localStream.current) localStream.current.getTracks().forEach(t => t.stop());
             if (peerConnection.current) peerConnection.current.close();
         };
-    }, [token]);
+    }, [token, ws]);
 
     const setupPeerConnection = () => {
         const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
 
         pc.onicecandidate = (event) => {
-            if (event.candidate && ws.current && activeFriend) {
-                ws.current.send(JSON.stringify({
+            if (event.candidate && ws && activeFriend) {
+                ws.send(JSON.stringify({
                     type: 'webrtc-signal',
                     to: activeFriend._id,
                     signal: { candidate: event.candidate }
@@ -81,7 +81,7 @@ const VideoCall = () => {
             await peerConnection.current.setRemoteDescription(new RTCSessionDescription(signal.offer));
             const answer = await peerConnection.current.createAnswer();
             await peerConnection.current.setLocalDescription(answer);
-            ws.current.send(JSON.stringify({
+            ws.send(JSON.stringify({
                 type: 'webrtc-signal',
                 to: activeFriend._id,
                 signal: { answer }
@@ -107,7 +107,7 @@ const VideoCall = () => {
             const offer = await peerConnection.current.createOffer();
             await peerConnection.current.setLocalDescription(offer);
             
-            ws.current.send(JSON.stringify({
+            ws.send(JSON.stringify({
                 type: 'webrtc-signal',
                 to: activeFriend._id,
                 signal: { offer }

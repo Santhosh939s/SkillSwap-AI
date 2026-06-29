@@ -42,9 +42,18 @@
   - Implemented WebRTC signaling over WebSockets (`webrtc-signal`).
   - Styled a modern PiP (Picture-in-Picture) video interface.
 
+## Completed Tasks (Advanced Enhancements)
+- **Phase 11: Notifications**
+  - Added `notifications` array to `User` schema.
+  - Implemented `/api/notifications` route.
+  - Refactored WebSockets into a global `NotificationContext`.
+  - Added `react-toastify` for real-time notification popups.
+  - Created global `Navbar` with an interactive notification bell.
+  - Emitted real-time WebSocket notifications upon receiving a friend request and chat message.
+
 ## Pending Tasks
-- **Phase 2 (Page 9): Course & Learning Dashboard** (Starting Phase 2)
-- Phases 11-20 (Advanced Enhancements)
+- **Phase 12: Scheduling (Next)**
+- Phases 13-20 (Advanced Enhancements)
 
 ## Folder Structure Changes
 ```
