@@ -33,7 +33,9 @@ const userSchema = new mongoose.Schema({
     level: { type: Number, default: 1 },
     currentStreak: { type: Number, default: 0 },
     longestStreak: { type: Number, default: 0 },
-    lastActiveDate: { type: Date }
+    lastActiveDate: { type: Date },
+    // Phase 15: Gamification Leaderboards
+    leaderboardVisibility: { type: String, enum: ['Private', 'Friends', 'Global'], default: 'Private' }
 });
 
 module.exports = mongoose.model('User', userSchema);

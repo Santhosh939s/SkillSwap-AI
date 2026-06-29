@@ -14,6 +14,7 @@ import Schedule from './pages/Schedule';
 import LearningTracker from './pages/LearningTracker';
 import Assessments from './pages/Assessments';
 import QuizEngine from './pages/QuizEngine';
+import Leaderboard from './pages/Leaderboard';
 import { useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,6 +41,7 @@ const AppRoutes = () => {
             <Route path="/tracker" element={token ? <LearningTracker /> : <Navigate to="/login" />} />
             <Route path="/assessments" element={token ? <Assessments /> : <Navigate to="/login" />} />
             <Route path="/assessments/:id" element={token ? <QuizEngine /> : <Navigate to="/login" />} />
+            <Route path="/leaderboard" element={token ? <Leaderboard /> : <Navigate to="/login" />} />
             {/* Redirect everything else to login for now in phase 1 */}
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

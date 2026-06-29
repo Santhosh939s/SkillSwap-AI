@@ -31,13 +31,39 @@ const Profile = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-8">My Profile</h1>
             {profile ? (
                 <div className="bg-white shadow rounded-lg p-8 border">
-                    <div className="flex items-center space-x-6 mb-8">
-                        <div className="h-24 w-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-4xl">
-                            {profile.name.charAt(0).toUpperCase()}
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
+                        <div className="flex items-center space-x-6">
+                            <div className="h-24 w-24 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-4xl">
+                                {profile.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
+                                <p className="text-gray-500">{profile.email}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
-                            <p className="text-gray-500">{profile.email}</p>
+                        <div className="mt-4 sm:mt-0">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Leaderboard Visibility</label>
+                            <select 
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                value={profile.leaderboardVisibility || 'Private'}
+                                onChange={async (e) => {
+                                    const newVis = e.target.value;
+                                    setProfile({...profile, leaderboardVisibility: newVis});
+                                    try {
+                                        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                                        await axios.put(`${API_URL}/api/profile/visibility`, { visibility: newVis }, { headers: { 'x-auth-token': token } });
+                                    } catch (err) {
+                                        console.error('Failed to update visibility');
+                                    }
+                                }}
+                            >
+                                <option value="Private">Private (Opt-Out)</option>
+                                <option value="Friends">Friends Only</option>
+                                <option value="Global">Global</option>
+                            </select>
+                            {(!profile.leaderboardVisibility || profile.leaderboardVisibility === 'Private') && (
+                                <p className="text-xs text-red-500 mt-1">Leaderboard participation disabled.</p>
+                            )}
                         </div>
                     </div>
                     

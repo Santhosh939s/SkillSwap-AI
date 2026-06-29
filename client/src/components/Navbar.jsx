@@ -34,6 +34,7 @@ const Navbar = () => {
                             <Link to="/schedule" className="text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500 text-sm font-medium">Schedule</Link>
                             <Link to="/tracker" className="text-purple-600 hover:text-purple-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-bold">Tracker</Link>
                             <Link to="/assessments" className="text-green-600 hover:text-green-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-green-500 text-sm font-bold">Assessments</Link>
+                            <Link to="/leaderboard" className="text-yellow-600 hover:text-yellow-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-yellow-500 text-sm font-bold">Leaderboard</Link>
                         </div>
                     </div>
                     <div className="flex items-center space-x-4 relative">

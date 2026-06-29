@@ -133,3 +133,19 @@ exports.markNotificationsRead = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
+exports.updateVisibility = async (req, res) => {
+    try {
+        const { visibility } = req.body;
+        if (!['Private', 'Friends', 'Global'].includes(visibility)) {
+            return res.status(400).json({ success: false, message: 'Invalid visibility option' });
+        }
+        const user = await User.findById(req.user.id);
+        user.leaderboardVisibility = visibility;
+        await user.save();
+        res.json({ success: true, data: user.leaderboardVisibility });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};

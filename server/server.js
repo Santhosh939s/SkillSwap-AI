@@ -21,6 +21,7 @@ const userRoutes = require('./routes/userRoutes');
 const meetingRoutes = require('./routes/meetingRoutes');
 const progressRoutes = require('./routes/progressRoutes');
 const assessmentRoutes = require('./routes/assessmentRoutes');
+const leaderboardRoutes = require('./routes/leaderboardRoutes');
 
 // Initialize App
 const app = express();
@@ -145,6 +146,7 @@ app.use('/api', userRoutes); // mounts /api/profile and /api/matches
 app.use('/api/meetings', meetingRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/assessments', assessmentRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 // Legacy Routes (To be migrated in future phases)
 

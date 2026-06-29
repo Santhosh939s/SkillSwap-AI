@@ -10,5 +10,6 @@ router.post('/friends/request/:id', auth, userController.sendFriendRequest);
 router.post('/friends/accept/:id', auth, userController.acceptFriendRequest);
 router.get('/notifications', auth, userController.getNotifications);
 router.put('/notifications/read', auth, userController.markNotificationsRead);
+router.put('/profile/visibility', auth, userController.updateVisibility);
 
 module.exports = router;

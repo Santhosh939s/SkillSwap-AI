@@ -75,8 +75,14 @@
   - Added a global `seedAssessments.js` script to populate the database with a "React Intermediate" test.
   - Updated the user Profile page to display earned "Verified Skill Badges".
 
+- **Phase 15: Gamification Leaderboards (Completed)**
+  - Updated User model to support `leaderboardVisibility` (Private, Friends, Global).
+  - Built a dynamic backend aggregation pipeline (`leaderboardController.js`) to sort and rank users based on selectable metrics (totalXP, level, streaks, badges).
+  - Implemented the `Leaderboard.jsx` UI with Scope filtering (Global vs Friends) and Metric filtering.
+  - Added visibility controls to the User Profile page, enforcing "Privacy by Default" architecture.
+
 ## Pending Tasks
-- **Phase 15: Gamification Leaderboards (Next)**
+- **Phase 16: Admin Analytics Dashboard (Next)**
 - Phases 14-20 (Advanced Enhancements)
 
 ## Folder Structure Changes
