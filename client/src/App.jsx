@@ -12,6 +12,8 @@ import Profile from './pages/Profile';
 import VideoCall from './pages/VideoCall';
 import Schedule from './pages/Schedule';
 import LearningTracker from './pages/LearningTracker';
+import Assessments from './pages/Assessments';
+import QuizEngine from './pages/QuizEngine';
 import { useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +38,8 @@ const AppRoutes = () => {
             <Route path="/video-call" element={token ? <VideoCall /> : <Navigate to="/login" />} />
             <Route path="/schedule" element={token ? <Schedule /> : <Navigate to="/login" />} />
             <Route path="/tracker" element={token ? <LearningTracker /> : <Navigate to="/login" />} />
+            <Route path="/assessments" element={token ? <Assessments /> : <Navigate to="/login" />} />
+            <Route path="/assessments/:id" element={token ? <QuizEngine /> : <Navigate to="/login" />} />
             {/* Redirect everything else to login for now in phase 1 */}
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

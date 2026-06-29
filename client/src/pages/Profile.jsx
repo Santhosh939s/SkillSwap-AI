@@ -5,15 +5,20 @@ import { AuthContext } from '../context/AuthContext';
 const Profile = () => {
     const { token } = useContext(AuthContext);
     const [profile, setProfile] = useState(null);
+    const [badges, setBadges] = useState([]);
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
                 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-                const res = await axios.get(`${API_URL}/api/profile`, {
-                    headers: { 'x-auth-token': token }
-                });
-                setProfile(res.data);
+                const [profRes, badgesRes] = await Promise.all([
+                    axios.get(`${API_URL}/api/profile`, { headers: { 'x-auth-token': token } }),
+                    axios.get(`${API_URL}/api/assessments/badges`, { headers: { 'x-auth-token': token } })
+                ]);
+                setProfile(profRes.data);
+                if (badgesRes.data.success) {
+                    setBadges(badgesRes.data.data);
+                }
             } catch (err) {
                 console.error('Failed to load profile');
             }
@@ -53,6 +58,29 @@ const Profile = () => {
                                 ))}
                             </ul>
                         </div>
+                    </div>
+
+                    {/* Verified Badges Section */}
+                    <div className="mt-12">
+                        <h3 className="text-xl font-bold text-gray-900 mb-6 border-b pb-2 flex items-center">
+                            <span className="mr-2">🏆</span> Verified Badges
+                        </h3>
+                        {badges.length === 0 ? (
+                            <p className="text-gray-500 italic">No badges earned yet. Take an assessment to earn one!</p>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {badges.map(b => (
+                                    <div key={b._id} className="flex items-center p-4 bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl shadow-sm hover:shadow transition-shadow">
+                                        <div className="text-4xl mr-4">{b.icon}</div>
+                                        <div>
+                                            <h4 className="font-bold text-gray-900">{b.name}</h4>
+                                            <p className="text-xs text-gray-500 font-semibold uppercase">{b.skill} • {b.difficulty}</p>
+                                            <p className="text-xs text-gray-400 mt-1">Issued: {new Date(b.issueDate).toLocaleDateString()}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             ) : (

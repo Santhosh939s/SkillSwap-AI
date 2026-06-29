@@ -68,8 +68,15 @@
   - Implemented the "Log Activity" modal to manually input learning sessions.
   - Built MongoDB aggregation pipelines to calculate current streaks, total learning hours, and active skills.
 
+- **Phase 14: Skill Assessment Engine (Completed)**
+  - Developed a secure, server-side scored quiz engine with robust anti-cheating mechanisms (randomized questions/options, retry limits).
+  - Built MongoDB schemas for `Assessment`, `AssessmentQuestion`, `AssessmentAttempt`, and `VerifiedBadge`.
+  - Implemented a focus-mode Assessment UI with a countdown timer and auto-submit functionality.
+  - Added a global `seedAssessments.js` script to populate the database with a "React Intermediate" test.
+  - Updated the user Profile page to display earned "Verified Skill Badges".
+
 ## Pending Tasks
-- **Phase 14: Skill Assessment Engine (Next)**
+- **Phase 15: Gamification Leaderboards (Next)**
 - Phases 14-20 (Advanced Enhancements)
 
 ## Folder Structure Changes
