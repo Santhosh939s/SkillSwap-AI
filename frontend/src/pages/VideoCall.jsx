@@ -35,7 +35,7 @@ const VideoCall = () => {
         const fetchMeeting = async () => {
             if (!meetingId) return;
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/meetings`, { headers: { 'x-auth-token': token } });
                 if (res.data.success) {
                     const found = res.data.data.find(m => m.meetingId === meetingId);
@@ -143,7 +143,7 @@ const VideoCall = () => {
     const joinRoom = async () => {
         if (!meeting) return;
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             await axios.post(`${API_URL}/api/meetings/${meeting._id}/join`, {}, { headers: { 'x-auth-token': token } });
             localStream.current = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             if (localVideoRef.current) localVideoRef.current.srcObject = localStream.current;
@@ -166,7 +166,7 @@ const VideoCall = () => {
             localStream.current = null;
         }
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             await axios.post(`${API_URL}/api/meetings/${meeting._id}/leave`, {}, { headers: { 'x-auth-token': token } });
         } catch (err) {
             console.error('Failed to log leave attendance', err);
@@ -196,7 +196,7 @@ const VideoCall = () => {
         const formData = new FormData();
         formData.append('file', file);
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.post(`${API_URL}/api/meetings/${meeting._id}/files`, formData, {
                 headers: { 'x-auth-token': token, 'Content-Type': 'multipart/form-data' }
             });
@@ -212,7 +212,7 @@ const VideoCall = () => {
         if (notesTimeout.current) clearTimeout(notesTimeout.current);
         notesTimeout.current = setTimeout(async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 await axios.put(`${API_URL}/api/meetings/${meeting._id}/notes`, { shared, personal }, { headers: { 'x-auth-token': token } });
             } catch (err) {
                 console.error('Failed to save notes');

@@ -12,7 +12,7 @@ const Assessments = () => {
         const fetchAssessments = async () => {
             if (!token) return;
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/assessments`, { headers: { 'x-auth-token': token } });
                 if (res.data.success) {
                     setAssessments(res.data.data);

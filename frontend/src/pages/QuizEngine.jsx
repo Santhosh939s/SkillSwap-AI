@@ -23,7 +23,7 @@ const QuizEngine = () => {
     useEffect(() => {
         const fetchQuiz = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/assessments/${id}/start`, { headers: { 'x-auth-token': token } });
                 if (res.data.success) {
                     setAssessment(res.data.data.assessment);
@@ -83,7 +83,7 @@ const QuizEngine = () => {
         clearInterval(timerRef.current);
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             
             // Format answers array
             const formattedAnswers = Object.keys(answers).map(qId => ({

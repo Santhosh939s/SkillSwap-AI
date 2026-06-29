@@ -16,7 +16,7 @@ const Leaderboard = () => {
             if (!token) return;
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/leaderboard`, {
                     headers: { 'x-auth-token': token },
                     params: { metric, scope }

@@ -25,7 +25,7 @@ const Community = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/users`, {
                     headers: { 'x-auth-token': token }
                 });
@@ -41,7 +41,7 @@ const Community = () => {
 
     const handleSendFriendRequest = async (userId) => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             await axios.post(`${API_URL}/api/friends/request/${userId}`, {}, {
                 headers: { 'x-auth-token': token }
             });

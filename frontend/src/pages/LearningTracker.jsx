@@ -30,7 +30,7 @@ const LearningTracker = () => {
 
     const fetchDashboard = async () => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const [dashRes, chartRes, goalsRes] = await Promise.all([
                 axios.get(`${API_URL}/api/progress/dashboard`, { headers: { 'x-auth-token': token } }),
                 axios.get(`${API_URL}/api/progress/charts?days=30`, { headers: { 'x-auth-token': token } }),
@@ -51,7 +51,7 @@ const LearningTracker = () => {
     const handleLogSubmit = async (e) => {
         e.preventDefault();
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const payload = {
                 ...logForm,
                 tags: logForm.tags.split(',').map(t => t.trim()).filter(t => t)

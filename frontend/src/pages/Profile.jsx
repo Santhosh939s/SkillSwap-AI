@@ -10,7 +10,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const [profRes, badgesRes] = await Promise.all([
                     axios.get(`${API_URL}/api/profile`, { headers: { 'x-auth-token': token } }),
                     axios.get(`${API_URL}/api/assessments/badges`, { headers: { 'x-auth-token': token } })
@@ -50,7 +50,7 @@ const Profile = () => {
                                     const newVis = e.target.value;
                                     setProfile({...profile, leaderboardVisibility: newVis});
                                     try {
-                                        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                                        const API_URL = import.meta.env.VITE_API_URL ;
                                         await axios.put(`${API_URL}/api/profile/visibility`, { visibility: newVis }, { headers: { 'x-auth-token': token } });
                                     } catch (err) {
                                         console.error('Failed to update visibility');

@@ -25,7 +25,7 @@ const AdminDashboard = () => {
             if (!token) return;
             setLoading(true);
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 
                 if (activeTab === 'overview' || activeTab === 'analytics' || activeTab === 'system') {
                     if (!metrics) {
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
 
     const handleRoleChange = async (userId, newRole) => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.put(`${API_URL}/api/admin/users/${userId}`, { role: newRole }, { headers: { 'x-auth-token': token } });
             if (res.data.success) {
                 toast.success('Role updated');
@@ -63,7 +63,7 @@ const AdminDashboard = () => {
 
     const handleStatusChange = async (userId, newStatus) => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.put(`${API_URL}/api/admin/users/${userId}`, { status: newStatus }, { headers: { 'x-auth-token': token } });
             if (res.data.success) {
                 toast.success('Status updated');

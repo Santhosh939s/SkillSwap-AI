@@ -33,7 +33,7 @@ const Register = () => {
                 skillsWanted: formData.skillsWanted.split(',').map(s => s.trim()).filter(s => s),
             };
 
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             await axios.post(`${API_URL}/register`, dataToSubmit);
             
             alert('Registration successful! Please login.');

@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
                 localStorage.setItem('token', token);
                 axios.defaults.headers.common['x-auth-token'] = token;
                 try {
-                    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                    const API_URL = import.meta.env.VITE_API_URL ;
                     const res = await axios.get(`${API_URL}/api/profile`);
                     setUser(res.data);
                 } catch (err) {
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     }, [token]);
 
     const login = async (email, password) => {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        const API_URL = import.meta.env.VITE_API_URL ;
         const res = await axios.post(`${API_URL}/login`, { email, password });
         setToken(res.data.token);
     };

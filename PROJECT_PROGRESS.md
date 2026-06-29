@@ -95,7 +95,7 @@
 
 ## Folder Structure Changes
 ```
-client/src/pages/
+frontend/src/pages/
   ├── Chat.jsx
   ├── Community.jsx
   ├── Dashboard.jsx
@@ -104,7 +104,7 @@ client/src/pages/
   ├── Profile.jsx
   ├── Register.jsx
   └── VideoCall.jsx
-server/
+backend/
   ├── config/db.js
   ├── controllers/authController.js, userController.js
   ├── middleware/auth.js

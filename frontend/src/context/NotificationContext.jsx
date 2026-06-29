@@ -16,7 +16,7 @@ export const NotificationProvider = ({ children }) => {
     const fetchNotifications = async () => {
         if (!token) return;
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.get(`${API_URL}/api/notifications`, {
                 headers: { 'x-auth-token': token }
             });
@@ -33,7 +33,7 @@ export const NotificationProvider = ({ children }) => {
         const fetchMeetings = async () => {
             if (!token) return;
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/meetings`, { headers: { 'x-auth-token': token } });
                 if (res.data.success) {
                     setUpcomingMeetings(res.data.data.filter(m => m.status === 'accepted' && new Date(m.date) > new Date()));
@@ -88,7 +88,7 @@ export const NotificationProvider = ({ children }) => {
     useEffect(() => {
         if (!token) return;
 
-        const WS_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000').replace(/^http/, 'ws');
+        const WS_URL = (import.meta.env.VITE_API_URL ).replace(/^http/, 'ws');
         ws.current = new WebSocket(`${WS_URL}?token=${token}`);
 
         const handleMessage = (event) => {
@@ -117,7 +117,7 @@ export const NotificationProvider = ({ children }) => {
 
     const markAsRead = async () => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             await axios.put(`${API_URL}/api/notifications/read`, {}, {
                 headers: { 'x-auth-token': token }
             });

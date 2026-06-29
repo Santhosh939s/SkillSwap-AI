@@ -17,7 +17,7 @@ const Chat = () => {
         // Fetch profile to get friends and my user ID
         const fetchProfile = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/profile`, {
                     headers: { 'x-auth-token': token }
                 });
@@ -57,7 +57,7 @@ const Chat = () => {
         const fetchMessages = async () => {
             if (!activeFriend) return;
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const res = await axios.get(`${API_URL}/api/messages/${activeFriend._id}`, {
                     headers: { 'x-auth-token': token }
                 });

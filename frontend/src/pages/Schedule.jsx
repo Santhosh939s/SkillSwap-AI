@@ -24,7 +24,7 @@ const Schedule = () => {
 
     const fetchMeetings = async () => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.get(`${API_URL}/api/meetings`, {
                 headers: { 'x-auth-token': token }
             });
@@ -39,7 +39,7 @@ const Schedule = () => {
     useEffect(() => {
         const fetchFriends = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                const API_URL = import.meta.env.VITE_API_URL ;
                 const resProfile = await axios.get(`${API_URL}/api/profile`, {
                     headers: { 'x-auth-token': token }
                 });
@@ -67,7 +67,7 @@ const Schedule = () => {
     const handleRequestMeeting = async (e) => {
         e.preventDefault();
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             // Combine selectedDate (date part) and time from the input if we wanted, 
             // but the input is datetime-local, so it has both.
             const res = await axios.post(`${API_URL}/api/meetings`, {
@@ -93,7 +93,7 @@ const Schedule = () => {
 
     const handleUpdateStatus = async (id, status) => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.put(`${API_URL}/api/meetings/${id}`, { status }, {
                 headers: { 'x-auth-token': token }
             });
@@ -109,7 +109,7 @@ const Schedule = () => {
         const reason = prompt('Reason for cancellation:');
         if (reason === null) return;
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            const API_URL = import.meta.env.VITE_API_URL ;
             const res = await axios.post(`${API_URL}/api/meetings/${id}/cancel`, { reason }, {
                 headers: { 'x-auth-token': token }
             });
