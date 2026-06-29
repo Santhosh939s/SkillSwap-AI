@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 
 const attendanceSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     joinedAt: { type: Date },
     leftAt: { type: Date },
+    duration: { type: Number, default: 0 }, // Session duration in seconds
     networkDisconnects: { type: Number, default: 0 },
-    reconnects: { type: Number, default: 0 },
-    status: { type: String, enum: ['present', 'absent', 'left'], default: 'absent' }
+    reconnectCount: { type: Number, default: 0 },
+    disconnectCount: { type: Number, default: 0 },
+    attendanceStatus: { type: String, enum: ['joined', 'left', 'completed'], default: 'joined' }
 }, { _id: false });
 
 const meetingSchema = new mongoose.Schema({
@@ -51,7 +53,16 @@ const meetingSchema = new mongoose.Schema({
         createdAt: { type: Date }
     },
 
-    createdAt: { type: Date, default: Date.now }
-});
+    // Audit Info
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+
+}, { timestamps: true });
+
+// Database Indexes
+meetingSchema.index({ requester: 1 });
+meetingSchema.index({ recipient: 1 });
+meetingSchema.index({ status: 1 });
+meetingSchema.index({ date: 1 });
 
 module.exports = mongoose.model('Meeting', meetingSchema);
