@@ -34,8 +34,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
 // Middleware
 app.use(cors());
 app.use(express.json());
-// Serve static files from frontend build
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+// Serve static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- Database Connection ---
@@ -195,8 +194,8 @@ app.post('/forgot-password/reset', async (req, res) => {
 });
 
 // --- Final Setup ---
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+app.get('/', (req, res) => {
+    res.json({ message: 'SkillSwap API is running successfully.' });
 });
 
 server.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
