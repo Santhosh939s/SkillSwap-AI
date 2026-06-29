@@ -53,114 +53,118 @@ const Leaderboard = () => {
     };
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-12">
-            <div className="text-center mb-10">
-                <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Leaderboard</h1>
-                <p className="text-xl text-gray-500">Compete with friends and learners worldwide.</p>
-            </div>
-
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10">
-                <div className="flex bg-gray-100 p-1 rounded-lg">
-                    <button 
-                        onClick={() => setScope('Global')}
-                        className={`px-6 py-2 rounded-md font-semibold text-sm transition-colors ${scope === 'Global' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
-                    >
-                        Global
-                    </button>
-                    <button 
-                        onClick={() => setScope('Friends')}
-                        className={`px-6 py-2 rounded-md font-semibold text-sm transition-colors ${scope === 'Friends' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
-                    >
-                        Friends
-                    </button>
+        <div className="min-h-screen bg-background text-text-primary">
+            <div className="max-w-5xl mx-auto px-4 py-12">
+                <div className="text-center mb-10">
+                    <h1 className="text-4xl font-extrabold text-text-primary mb-4 tracking-tight">Leaderboard</h1>
+                    <p className="text-xl text-text-secondary">Compete with friends and learners worldwide.</p>
                 </div>
-                
-                <select 
-                    value={metric} 
-                    onChange={(e) => setMetric(e.target.value)}
-                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 px-4 py-2"
-                >
-                    <option value="totalXP">Total XP (Top Learners)</option>
-                    <option value="currentStreak">Current Streak</option>
-                    <option value="longestStreak">Longest Streak</option>
-                    <option value="badges">Verified Badges</option>
-                    <option value="level">Level</option>
-                </select>
-            </div>
 
-            {/* Current User Banner */}
-            {currentUserStats && (
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 mb-8 text-white flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                        <div className="h-12 w-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center font-bold text-xl">
-                            {currentUserStats.rank === 'Private' ? '👻' : currentUserStats.rank}
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-lg">My Ranking</h3>
-                            <p className="text-blue-100 text-sm">
-                                {currentUserStats.rank === 'Private' 
-                                    ? 'You are hidden from the leaderboard. Update visibility in Profile.' 
-                                    : `You are ranked #${currentUserStats.rank} in ${scope}`}
-                            </p>
-                        </div>
+                {/* Filters */}
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-10">
+                    <div className="flex bg-background-secondary p-1 rounded-xl border border-border">
+                        <button 
+                            onClick={() => setScope('Global')}
+                            className={`px-6 py-2 rounded-lg font-semibold text-sm transition-all ${scope === 'Global' ? 'bg-card text-primary shadow-sm border border-border' : 'text-text-muted hover:text-text-secondary'}`}
+                        >
+                            Global
+                        </button>
+                        <button 
+                            onClick={() => setScope('Friends')}
+                            className={`px-6 py-2 rounded-lg font-semibold text-sm transition-all ${scope === 'Friends' ? 'bg-card text-primary shadow-sm border border-border' : 'text-text-muted hover:text-text-secondary'}`}
+                        >
+                            Friends
+                        </button>
                     </div>
-                    {currentUserStats.data && (
-                        <div className="text-right">
-                            <p className="text-3xl font-black">{currentUserStats.data.metricValue}</p>
-                            <p className="text-blue-100 text-sm uppercase font-semibold">{getMetricLabel()}</p>
-                        </div>
-                    )}
+                    
+                    <select 
+                        value={metric} 
+                        onChange={(e) => setMetric(e.target.value)}
+                        className="appearance-none bg-background-secondary border border-border text-text-primary text-sm rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent px-5 py-2.5 outline-none transition-all cursor-pointer shadow-sm"
+                    >
+                        <option value="totalXP">Total XP (Top Learners)</option>
+                        <option value="currentStreak">Current Streak</option>
+                        <option value="longestStreak">Longest Streak</option>
+                        <option value="badges">Verified Badges</option>
+                        <option value="level">Level</option>
+                    </select>
                 </div>
-            )}
 
-            {/* Leaderboard Table */}
-            <div className="bg-white rounded-xl shadow border border-gray-100 overflow-hidden">
-                {loading ? (
-                    <div className="p-12 text-center text-gray-500 font-medium">Loading rankings...</div>
-                ) : leaderboard.length === 0 ? (
-                    <div className="p-12 text-center text-gray-500 font-medium">No users found for this category.</div>
-                ) : (
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rank</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">User</th>
-                                <th scope="col" className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Level</th>
-                                <th scope="col" className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">{getMetricLabel()}</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {leaderboard.map((user, index) => (
-                                <tr key={user._id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="text-2xl">{getRankIcon(index)}</span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                            <div className="flex-shrink-0 h-10 w-10">
-                                                <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                                                    {user.name.charAt(0).toUpperCase()}
+                {/* Current User Banner */}
+                {currentUserStats && (
+                    <div className="bg-gradient-to-r from-primary to-accent rounded-2xl shadow-lg p-6 mb-8 text-white flex items-center justify-between shadow-primary/20">
+                        <div className="flex items-center space-x-4">
+                            <div className="h-14 w-14 bg-white/20 rounded-xl flex items-center justify-center font-bold text-2xl border border-white/30">
+                                {currentUserStats.rank === 'Private' ? '👻' : currentUserStats.rank}
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-xl text-white">My Ranking</h3>
+                                <p className="text-white/80 text-sm mt-1">
+                                    {currentUserStats.rank === 'Private' 
+                                        ? 'You are hidden from the leaderboard. Update visibility in Profile.' 
+                                        : `You are ranked #${currentUserStats.rank} in ${scope}`}
+                                </p>
+                            </div>
+                        </div>
+                        {currentUserStats.data && (
+                            <div className="text-right">
+                                <p className="text-4xl font-black">{currentUserStats.data.metricValue}</p>
+                                <p className="text-white/80 text-sm uppercase font-bold tracking-wider mt-1">{getMetricLabel()}</p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Leaderboard Table */}
+                <div className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
+                    {loading ? (
+                        <div className="flex justify-center p-12">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        </div>
+                    ) : leaderboard.length === 0 ? (
+                        <div className="p-12 text-center text-text-muted font-medium bg-background-secondary border border-border border-dashed m-4 rounded-xl">No users found for this category.</div>
+                    ) : (
+                        <table className="min-w-full divide-y divide-border">
+                            <thead className="bg-background-secondary">
+                                <tr>
+                                    <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Rank</th>
+                                    <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-text-muted uppercase tracking-wider">User</th>
+                                    <th scope="col" className="px-6 py-5 text-left text-xs font-bold text-text-muted uppercase tracking-wider">Level</th>
+                                    <th scope="col" className="px-6 py-5 text-right text-xs font-bold text-text-muted uppercase tracking-wider">{getMetricLabel()}</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-card divide-y divide-border">
+                                {leaderboard.map((user, index) => (
+                                    <tr key={user._id} className="hover:bg-card-hover transition-colors">
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <span className="text-3xl drop-shadow-sm">{getRankIcon(index)}</span>
+                                        </td>
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                <div className="flex-shrink-0 h-12 w-12">
+                                                    <div className="h-12 w-12 rounded-xl bg-background-secondary border border-primary/20 flex items-center justify-center text-primary font-bold shadow-[0_0_10px_rgba(79,70,229,0.1)]">
+                                                        {user.name.charAt(0).toUpperCase()}
+                                                    </div>
+                                                </div>
+                                                <div className="ml-5">
+                                                    <div className="text-base font-bold text-text-primary">{user.name}</div>
                                                 </div>
                                             </div>
-                                            <div className="ml-4">
-                                                <div className="text-sm font-bold text-gray-900">{user.name}</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                            Lvl {user.level || 1}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-lg font-black text-gray-900">
-                                        {user.metricValue}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+                                        </td>
+                                        <td className="px-6 py-5 whitespace-nowrap">
+                                            <span className="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-primary/10 text-primary border border-primary/20">
+                                                Lvl {user.level || 1}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-5 whitespace-nowrap text-right text-xl font-black text-text-primary">
+                                            {user.metricValue}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
             </div>
         </div>
     );

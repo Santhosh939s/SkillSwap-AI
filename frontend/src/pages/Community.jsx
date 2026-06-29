@@ -58,73 +58,97 @@ const Community = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-gray-900">SkillSwap Community</h1>
+        <div className="min-h-screen bg-background text-text-primary">
+            <header className="bg-card border-b border-border shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <h1 className="text-2xl font-bold text-text-primary tracking-tight">SkillSwap Community</h1>
+                    <p className="text-text-secondary mt-1">Connect with mentors and learners globally.</p>
                 </div>
             </header>
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Search */}
-                <div className="mb-8">
+                <div className="mb-10 max-w-2xl">
                     <input 
                         type="text" 
                         placeholder="Search for users or skills..." 
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg shadow-sm border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-3 bg-background-secondary border border-border rounded-xl text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all shadow-sm"
                     />
                 </div>
 
                 {/* Users Grid */}
                 <div className="mb-12">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">Discover Members</h2>
+                    <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-primary"></span> Discover Members
+                    </h2>
                     {loading ? (
-                        <p>Loading community members...</p>
+                        <div className="flex justify-center py-12">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredUsers.map(user => (
-                                <div key={user._id} className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow">
-                                    <div className="flex items-center space-x-4 mb-4">
-                                        <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-xl">
+                                <div key={user._id} className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-primary/50 transition-colors">
+                                    <div className="flex items-center space-x-4 mb-6">
+                                        <div className="h-14 w-14 rounded-xl bg-background-secondary border border-primary/30 flex items-center justify-center text-primary font-bold text-2xl shadow-[0_0_10px_rgba(79,70,229,0.1)]">
                                             {user.name.charAt(0).toUpperCase()}
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-lg text-gray-900">{user.name}</h3>
+                                            <h3 className="font-bold text-lg text-text-primary">{user.name}</h3>
+                                            <div className="text-xs text-text-muted mt-1">Level {user.level || 1} Learner</div>
                                         </div>
                                     </div>
-                                    <div className="text-sm text-gray-600 mb-4">
-                                        <p><strong className="text-gray-800">Teaches:</strong> {user.skillsKnown.join(', ')}</p>
-                                        <p className="mt-1"><strong className="text-gray-800">Learns:</strong> {user.skillsWanted.join(', ')}</p>
+                                    <div className="text-sm text-text-secondary mb-6 space-y-3 bg-background-secondary p-4 rounded-xl border border-border/50">
+                                        <div>
+                                            <strong className="text-text-primary block mb-1">Teaches:</strong> 
+                                            <div className="flex flex-wrap gap-1">
+                                                {user.skillsKnown.map((s,i) => <span key={i} className="bg-card border border-border px-2 py-0.5 rounded text-xs">{s}</span>)}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <strong className="text-text-primary block mb-1">Learns:</strong> 
+                                            <div className="flex flex-wrap gap-1">
+                                                {user.skillsWanted.map((s,i) => <span key={i} className="bg-card border border-border px-2 py-0.5 rounded text-xs">{s}</span>)}
+                                            </div>
+                                        </div>
                                     </div>
                                     <button 
                                         onClick={() => handleSendFriendRequest(user._id)}
-                                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors text-sm font-medium"
+                                        className="w-full bg-primary/10 text-primary border border-primary/20 py-2.5 rounded-xl hover:bg-primary hover:text-white transition-all text-sm font-medium active:scale-95"
                                     >
-                                        Send Friend Request
+                                        Send Request
                                     </button>
                                 </div>
                             ))}
-                            {filteredUsers.length === 0 && <p className="col-span-3 text-gray-500">No users found matching your search.</p>}
+                            {filteredUsers.length === 0 && (
+                                <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-12 bg-card border border-border border-dashed rounded-2xl">
+                                    <p className="text-text-muted">No users found matching your search.</p>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
 
                 {/* Global Map */}
-                <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">Global Reach</h2>
-                    <div className="h-[400px] w-full rounded overflow-hidden">
-                        <MapContainer center={[20, 0]} zoom={2} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
+                <div className="bg-card border border-border p-6 rounded-2xl shadow-sm">
+                    <h2 className="text-xl font-bold text-text-primary mb-6 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-accent"></span> Global Reach
+                    </h2>
+                    <div className="h-[400px] w-full rounded-xl overflow-hidden border border-border">
+                        <MapContainer center={[20, 0]} zoom={2} scrollWheelZoom={false} style={{ height: '100%', width: '100%', zIndex: 0 }}>
                             <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='&copy; OpenStreetMap'
+                                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                             />
                             {users.map(user => user.location && (
                                 <Marker key={user._id} position={[user.location.lat, user.location.lng]}>
-                                    <Popup>
-                                        <strong>{user.name}</strong><br />
-                                        Teaches: {user.skillsKnown.join(', ')}
+                                    <Popup className="custom-popup">
+                                        <div className="font-sans">
+                                            <strong className="text-gray-900 block mb-1">{user.name}</strong>
+                                            <span className="text-sm text-gray-600">Teaches: {user.skillsKnown.join(', ')}</span>
+                                        </div>
                                     </Popup>
                                 </Marker>
                             ))}
