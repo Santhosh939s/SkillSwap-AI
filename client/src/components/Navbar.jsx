@@ -31,6 +31,7 @@ const Navbar = () => {
                             <Link to="/dashboard" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500 text-sm font-medium">Dashboard</Link>
                             <Link to="/community" className="text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500 text-sm font-medium">Community</Link>
                             <Link to="/chat" className="text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500 text-sm font-medium">Chat</Link>
+                            <Link to="/schedule" className="text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-blue-500 text-sm font-medium">Schedule</Link>
                         </div>
                     </div>
                     <div className="flex items-center space-x-4 relative">

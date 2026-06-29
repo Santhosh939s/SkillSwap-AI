@@ -18,6 +18,7 @@ const Message = require('./models/Message');
 const auth = require('./middleware/auth');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const meetingRoutes = require('./routes/meetingRoutes');
 
 // Initialize App
 const app = express();
@@ -81,6 +82,7 @@ wss.on('connection', (ws, req) => {
 // Use Modular Routes
 app.use('/', authRoutes); // mounts /register and /login
 app.use('/api', userRoutes); // mounts /api/profile and /api/matches
+app.use('/api/meetings', meetingRoutes);
 
 // Legacy Routes (To be migrated in future phases)
 

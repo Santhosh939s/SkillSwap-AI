@@ -10,6 +10,7 @@ import Community from './pages/Community';
 import Chat from './pages/Chat';
 import Profile from './pages/Profile';
 import VideoCall from './pages/VideoCall';
+import Schedule from './pages/Schedule';
 import { useContext } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,6 +33,7 @@ const AppRoutes = () => {
             <Route path="/chat" element={token ? <Chat /> : <Navigate to="/login" />} />
             <Route path="/profile" element={token ? <Profile /> : <Navigate to="/login" />} />
             <Route path="/video-call" element={token ? <VideoCall /> : <Navigate to="/login" />} />
+            <Route path="/schedule" element={token ? <Schedule /> : <Navigate to="/login" />} />
             {/* Redirect everything else to login for now in phase 1 */}
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

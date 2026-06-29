@@ -50,10 +50,16 @@
   - Added `react-toastify` for real-time notification popups.
   - Created global `Navbar` with an interactive notification bell.
   - Emitted real-time WebSocket notifications upon receiving a friend request and chat message.
+- **Phase 12: Scheduling**
+  - Created `Meeting` database schema (`requester`, `recipient`, `date`, `topic`, `status`).
+  - Added RESTful `/api/meetings` routes for CRUD scheduling operations.
+  - Built `Schedule.jsx` with a Tailwind CSS list view and modal to book a friend.
+  - Hooked up real-time WebSockets to notify users when meetings are requested, accepted, or rejected.
+  - Added dynamic "Join Call" button that links to `/video-call` for accepted meetings.
 
 ## Pending Tasks
-- **Phase 12: Scheduling (Next)**
-- Phases 13-20 (Advanced Enhancements)
+- **Phase 13: Learning Tracker (Next)**
+- Phases 14-20 (Advanced Enhancements)
 
 ## Folder Structure Changes
 ```
