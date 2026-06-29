@@ -32,6 +32,7 @@ app.use(cors());
 app.use(express.json());
 // Serve static files from parent directory where html files currently reside
 app.use(express.static(path.join(__dirname, '..')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // --- Database Connection ---
 connectDB();
@@ -85,6 +86,12 @@ wss.on('connection', (ws, req) => {
                                 client.send(JSON.stringify(data));
                             }
                         });
+                        // Persist to DB
+                        const Meeting = require('./models/Meeting');
+                        Meeting.findOneAndUpdate(
+                            { meetingId: ws.roomId },
+                            { $push: { chat: { sender: decoded.id, message: data.message, timestamp: Date.now() } } }
+                        ).exec();
                     }
                 }
                 

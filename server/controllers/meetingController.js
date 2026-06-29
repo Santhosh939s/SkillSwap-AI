@@ -275,3 +275,74 @@ exports.leaveMeeting = async (req, res) => {
         res.status(500).json({ success: false, message: 'Server Error' });
     }
 };
+
+// Update Notes
+exports.updateNotes = async (req, res) => {
+    try {
+        const { shared, personal } = req.body;
+        const meeting = await Meeting.findById(req.params.id);
+        if (!meeting) return res.status(404).json({ success: false, message: 'Meeting not found' });
+        
+        if (shared !== undefined) {
+            meeting.notes.shared = shared;
+        }
+        
+        if (personal !== undefined) {
+            let pNote = meeting.notes.personal.find(p => p.user.toString() === req.user.id);
+            if (!pNote) {
+                meeting.notes.personal.push({ user: req.user.id, content: personal });
+            } else {
+                pNote.content = personal;
+            }
+        }
+
+        meeting.updatedBy = req.user.id;
+        await meeting.save();
+        
+        res.json({ success: true, message: 'Notes updated', data: meeting.notes });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+// Upload File
+exports.uploadFile = async (req, res) => {
+    try {
+        const meeting = await Meeting.findById(req.params.id);
+        if (!meeting) return res.status(404).json({ success: false, message: 'Meeting not found' });
+        
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'No file uploaded' });
+        }
+
+        const newFile = {
+            url: `/uploads/${req.file.filename}`,
+            filename: req.file.originalname,
+            uploader: req.user.id,
+            timestamp: Date.now()
+        };
+
+        meeting.files.push(newFile);
+        meeting.updatedBy = req.user.id;
+        await meeting.save();
+        
+        res.json({ success: true, message: 'File uploaded successfully', data: newFile });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+// Get Files
+exports.getFiles = async (req, res) => {
+    try {
+        const meeting = await Meeting.findById(req.params.id).populate('files.uploader', 'name');
+        if (!meeting) return res.status(404).json({ success: false, message: 'Meeting not found' });
+        
+        res.json({ success: true, data: meeting.files });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};

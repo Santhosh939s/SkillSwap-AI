@@ -50,12 +50,16 @@
   - Added `react-toastify` for real-time notification popups.
   - Created global `Navbar` with an interactive notification bell.
   - Emitted real-time WebSocket notifications upon receiving a friend request and chat message.
-- **Phase 12: Scheduling**
-  - Created `Meeting` database schema (`requester`, `recipient`, `date`, `topic`, `status`).
-  - Added RESTful `/api/meetings` routes for CRUD scheduling operations.
-  - Built `Schedule.jsx` with a Tailwind CSS list view and modal to book a friend.
-  - Hooked up real-time WebSockets to notify users when meetings are requested, accepted, or rejected.
-  - Added dynamic "Join Call" button that links to `/video-call` for accepted meetings.
+- **Phase 12: Enterprise Scheduling & Calendar (Completed)**
+  - Replaced basic scheduler with a custom-styled `react-calendar` supporting Month, Week, and Agenda views.
+  - Upgraded Database Schema for `meetingId`, `attendance`, `chat`, `files`, `notes`, and audit logs.
+  - Implemented 10-minute active windows for the Meeting Join functionality.
+  - Refactored `VideoCall.jsx` into an Interactive `MeetingRoom.jsx`.
+  - Built WebSocket room-based signaling for isolated WebRTC peer-to-peer connections.
+  - Created persistent in-room chat via WebSockets and MongoDB.
+  - Implemented file sharing uploads using `multer`.
+  - Added live collaborative Shared Notes and Personal Notes functionality.
+  - Built background polling in `NotificationContext` for 24h, 1h, and 15m meeting reminders.
 
 ## Pending Tasks
 - **Phase 13: Learning Tracker (Next)**
