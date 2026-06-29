@@ -10,6 +10,9 @@ const http = require('http');
 const WebSocket = require('ws');
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
 
 // Import modular architecture components
 const connectDB = require('./config/db');
@@ -32,10 +35,24 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key';
 
 // Middleware
-app.use(cors());
+app.use(helmet());
+app.use(cors({
+    origin: process.env.FRONTEND_URL || ['http://localhost:5173', 'https://skillswap-orpin.vercel.app'],
+    credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser());
+
 // Serve static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Security: Global API Rate Limiter
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 200,
+    message: { msg: 'Too many requests from this IP, please try again later.' }
+});
+app.use('/api/', apiLimiter);
 
 // --- Database Connection ---
 connectDB();

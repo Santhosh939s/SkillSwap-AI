@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema({
     leaderboardVisibility: { type: String, enum: ['Private', 'Friends', 'Global'], default: 'Private' },
     // Phase 16: Admin Architecture
     role: { type: String, enum: ['user', 'admin', 'superadmin'], default: 'user' },
-    status: { type: String, enum: ['active', 'suspended'], default: 'active' }
+    status: { type: String, enum: ['active', 'suspended'], default: 'active' },
+    refreshToken: { type: String }
 });
 
 module.exports = mongoose.model('User', userSchema);
