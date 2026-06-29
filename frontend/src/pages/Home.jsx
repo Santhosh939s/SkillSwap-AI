@@ -96,21 +96,7 @@ const Home = () => {
                         )}
                     </div>
 
-                    {/* Trust Indicators */}
-                    <div className="mt-16 pt-10 border-t border-border/50 max-w-3xl mx-auto flex flex-wrap justify-center gap-8 sm:gap-16 animate-[fade-in-up_0.8s_ease-out_forwards] opacity-0" style={{ animationDelay: '400ms' }}>
-                        <div>
-                            <p className="text-3xl font-black text-text-primary">10k+</p>
-                            <p className="text-sm font-bold text-text-muted uppercase tracking-wider mt-1">Active Learners</p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-black text-text-primary">50k+</p>
-                            <p className="text-sm font-bold text-text-muted uppercase tracking-wider mt-1">Hours Swapped</p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-black text-text-primary">4.9/5</p>
-                            <p className="text-sm font-bold text-text-muted uppercase tracking-wider mt-1">Average Rating</p>
-                        </div>
-                    </div>
+
                 </div>
 
                 {/* Dashboard Mockup / Screenshot */}
@@ -325,7 +311,7 @@ const Home = () => {
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-1/2 bg-primary/20 blur-[100px] -z-10"></div>
                 <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
                     <h2 className="text-4xl md:text-6xl font-black text-text-primary tracking-tight mb-6">Ready to accelerate your career?</h2>
-                    <p className="text-xl text-text-secondary mb-10 max-w-2xl mx-auto">Join thousands of developers, designers, and creators trading knowledge every day.</p>
+                    <p className="text-xl text-text-secondary mb-10 max-w-2xl mx-auto">Join developers, designers, and creators trading knowledge every day.</p>
                     {!token ? (
                         <Link to="/register" className="inline-flex justify-center items-center px-10 py-5 text-xl font-bold rounded-xl text-white bg-primary hover:bg-primary-hover shadow-2xl shadow-primary/40 transition-all hover:-translate-y-1 active:scale-95 border border-primary/50">
                             Create Free Account
