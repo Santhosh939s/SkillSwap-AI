@@ -15,9 +15,15 @@
   - Added frontend logic to map comma-separated skills strings to arrays before API submission.
   - Configured routing in `App.jsx` for `/register`.
   
-## Pending Tasks
 - **Phase 1 (Page 3): Home Page**
-- Phase 1 (Page 4): Dashboard Page
+  - Checked out `page-3-home` branch.
+  - Migrated `index.html` structure to `Home.jsx` React component.
+  - Applied fully responsive Tailwind CSS styling.
+  - Implemented conditional rendering based on authentication state (showing "Dashboard" vs "Get Started" buttons).
+  - Configured root routing (`/`) in `App.jsx`.
+
+## Pending Tasks
+- **Phase 1 (Page 4): Dashboard Page**
 - Phase 1 (Page 5): Community Page
 - Phase 1 (Page 6): Chat Page
 - Phase 1 (Page 7): Profile Page
@@ -27,6 +33,7 @@
 ## Folder Structure Changes
 ```
 client/src/pages/
+  ├── Home.jsx
   ├── Login.jsx
   └── Register.jsx
 server/
@@ -48,3 +55,4 @@ server/
 ## Git Commit Reference
 - Login Page: `510b2f5` (main branch)
 - Register Page: `4a381d5` (page-2-register branch)
+- Home Page: `40ee778` (page-3-home branch)
