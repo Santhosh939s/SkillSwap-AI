@@ -17,6 +17,7 @@ const User = require('./models/User');
 const Message = require('./models/Message');
 const auth = require('./middleware/auth');
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Initialize App
 const app = express();
@@ -78,17 +79,9 @@ wss.on('connection', (ws, req) => {
 
 // Use Modular Routes
 app.use('/', authRoutes); // mounts /register and /login
+app.use('/api', userRoutes); // mounts /api/profile and /api/matches
 
 // Legacy Routes (To be migrated in future phases)
-
-app.get('/api/profile', auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password -securityAnswer').populate('friends', 'name skillsKnown').populate('friendRequests', 'name');
-        res.json(user);
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
 
 app.get('/api/users', auth, async (req, res) => {
     try {
@@ -168,20 +161,6 @@ app.post('/forgot-password/reset', async (req, res) => {
         user.password = await bcrypt.hash(newPassword, salt);
         await user.save();
         res.json({ msg: 'Password has been reset successfully' });
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
-
-app.get('/api/matches', auth, async (req, res) => {
-    try {
-        const currentUser = await User.findById(req.user.id);
-        const matches = await User.find({
-            _id: { $ne: req.user.id },
-            skillsWanted: { $in: currentUser.skillsKnown },
-            skillsKnown: { $in: currentUser.skillsWanted }
-        }).select('name skillsKnown skillsWanted profilePicture');
-        res.json(matches);
     } catch (err) {
         res.status(500).send('Server Error');
     }
