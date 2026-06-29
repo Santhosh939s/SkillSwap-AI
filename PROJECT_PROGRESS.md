@@ -22,9 +22,15 @@
   - Implemented conditional rendering based on authentication state (showing "Dashboard" vs "Get Started" buttons).
   - Configured root routing (`/`) in `App.jsx`.
 
-## Pending Tasks
 - **Phase 1 (Page 4): Dashboard Page**
-- Phase 1 (Page 5): Community Page
+  - Checked out `page-4-dashboard` branch.
+  - Migrated legacy `app.get('/api/profile')` and `app.get('/api/matches')` to modular `server/routes/userRoutes.js` and `server/controllers/userController.js`.
+  - Migrated `dashboard.html` structure to `Dashboard.jsx` React component.
+  - Implemented responsive Tailwind CSS UI grid mapping to existing backend data properties (skillsKnown, skillsWanted, activityLog, friendRequests, matches).
+  - Protected the `/dashboard` route using `AuthContext` token state.
+
+## Pending Tasks
+- **Phase 1 (Page 5): Community Page**
 - Phase 1 (Page 6): Chat Page
 - Phase 1 (Page 7): Profile Page
 - Phase 1 (Page 8): Video Call Page
@@ -33,15 +39,16 @@
 ## Folder Structure Changes
 ```
 client/src/pages/
+  ├── Dashboard.jsx
   ├── Home.jsx
   ├── Login.jsx
   └── Register.jsx
 server/
   ├── config/db.js
-  ├── controllers/authController.js
+  ├── controllers/authController.js, userController.js
   ├── middleware/auth.js
   ├── models/User.js, Message.js
-  ├── routes/authRoutes.js
+  ├── routes/authRoutes.js, userRoutes.js
   └── server.js
 ```
 
@@ -50,9 +57,11 @@ server/
 
 ## API Changes
 - Modularized `/login` and `/register` to Express Router in `authRoutes.js`. 
+- Modularized `/api/profile` and `/api/matches` to Express Router in `userRoutes.js`.
 - Preserved existing JSON request and response formats exactly for backward compatibility.
 
 ## Git Commit Reference
 - Login Page: `510b2f5` (main branch)
 - Register Page: `4a381d5` (page-2-register branch)
 - Home Page: `40ee778` (page-3-home branch)
+- Dashboard Page: `66acd5c` (page-4-dashboard branch)
