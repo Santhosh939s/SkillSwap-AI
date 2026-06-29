@@ -30,17 +30,42 @@ exports.getMetrics = async (req, res) => {
         ]);
         const totalXPAwarded = xpAggregation.length > 0 ? xpAggregation[0].totalXP : 0;
 
-        // Dummy data for charts to avoid massive complex aggregations on an empty DB
-        // In a real prod env, these would be built via time-series aggregations
-        const userGrowthData = [
-            { name: 'Mon', users: Math.max(10, totalUsers - 20) },
-            { name: 'Tue', users: Math.max(15, totalUsers - 15) },
-            { name: 'Wed', users: Math.max(22, totalUsers - 10) },
-            { name: 'Thu', users: Math.max(25, totalUsers - 5) },
-            { name: 'Fri', users: Math.max(30, totalUsers - 2) },
-            { name: 'Sat', users: totalUsers },
-            { name: 'Sun', users: totalUsers + 2 },
-        ];
+        const last7Days = new Date();
+        last7Days.setDate(last7Days.getDate() - 6);
+        last7Days.setHours(0, 0, 0, 0);
+
+        // Get daily new users for the last 7 days
+        const dailyUsers = await User.aggregate([
+            { $match: { createdAt: { $gte: last7Days } } },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        const userCountMap = {};
+        dailyUsers.forEach(d => { userCountMap[d._id] = d.count; });
+
+        const userGrowthData = [];
+        let cumulativeUsers = await User.countDocuments({ createdAt: { $lt: last7Days } });
+
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(last7Days);
+            date.setDate(date.getDate() + i);
+            const dateStr = date.toISOString().split('T')[0];
+            const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+            
+            const newUsersToday = userCountMap[dateStr] || 0;
+            cumulativeUsers += newUsersToday;
+            
+            userGrowthData.push({
+                name: dayName,
+                users: cumulativeUsers
+            });
+        }
 
         // System Health Placeholders
         const systemHealth = {
