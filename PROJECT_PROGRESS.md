@@ -81,9 +81,17 @@
   - Implemented the `Leaderboard.jsx` UI with Scope filtering (Global vs Friends) and Metric filtering.
   - Added visibility controls to the User Profile page, enforcing "Privacy by Default" architecture.
 
+- **Phase 16: Admin Analytics Dashboard (Completed)**
+  - Updated User model to support `role` (`user`, `admin`, `superadmin`) and `status`.
+  - Built `authAdmin.js` middleware to heavily restrict access to backend routes.
+  - Implemented the `AdminDashboard.jsx` interface featuring:
+    - Growth and Assessment Aggregation Cards.
+    - Recharts `LineChart` for User Registrations over time.
+    - A User Moderation Table to allow dynamic assignment of roles and suspension of users.
+  - Added `seedAdmin.js` utility to securely elevate the first superadmin without hardcoded emails.
+
 ## Pending Tasks
-- **Phase 16: Admin Analytics Dashboard (Next)**
-- Phases 14-20 (Advanced Enhancements)
+- Phases 17-20 (Advanced Enhancements)
 
 ## Folder Structure Changes
 ```

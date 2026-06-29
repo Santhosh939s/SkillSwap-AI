@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { NotificationContext } from '../context/NotificationContext';
 
 const Navbar = () => {
-    const { token, logout } = useContext(AuthContext);
+    const { token, user, logout } = useContext(AuthContext);
     const { notifications, markAsRead } = useContext(NotificationContext);
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -35,6 +35,12 @@ const Navbar = () => {
                             <Link to="/tracker" className="text-purple-600 hover:text-purple-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-purple-500 text-sm font-bold">Tracker</Link>
                             <Link to="/assessments" className="text-green-600 hover:text-green-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-green-500 text-sm font-bold">Assessments</Link>
                             <Link to="/leaderboard" className="text-yellow-600 hover:text-yellow-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-yellow-500 text-sm font-bold">Leaderboard</Link>
+                            {user && (user.role === 'admin' || user.role === 'superadmin') && (
+                                <Link to="/admin" className="text-red-600 hover:text-red-800 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-red-500 text-sm font-bold ml-4">
+                                    <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                    Admin Panel
+                                </Link>
+                            )}
                         </div>
                     </div>
                     <div className="flex items-center space-x-4 relative">

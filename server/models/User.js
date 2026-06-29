@@ -35,7 +35,10 @@ const userSchema = new mongoose.Schema({
     longestStreak: { type: Number, default: 0 },
     lastActiveDate: { type: Date },
     // Phase 15: Gamification Leaderboards
-    leaderboardVisibility: { type: String, enum: ['Private', 'Friends', 'Global'], default: 'Private' }
+    leaderboardVisibility: { type: String, enum: ['Private', 'Friends', 'Global'], default: 'Private' },
+    // Phase 16: Admin Architecture
+    role: { type: String, enum: ['user', 'admin', 'superadmin'], default: 'user' },
+    status: { type: String, enum: ['active', 'suspended'], default: 'active' }
 });
 
 module.exports = mongoose.model('User', userSchema);
