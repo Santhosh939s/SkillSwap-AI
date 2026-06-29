@@ -29,20 +29,34 @@
   - Implemented responsive Tailwind CSS UI grid mapping to existing backend data properties (skillsKnown, skillsWanted, activityLog, friendRequests, matches).
   - Protected the `/dashboard` route using `AuthContext` token state.
 
-## Pending Tasks
 - **Phase 1 (Page 5): Community Page**
-- Phase 1 (Page 6): Chat Page
-- Phase 1 (Page 7): Profile Page
-- Phase 1 (Page 8): Video Call Page
+  - Migrated `community.html` to React using `react-leaflet` for the global map.
+  - Implemented search filtering by skills and user names.
+  - Added friend request functionality using new modular routes.
+- **Phase 1 (Page 6): Chat Page**
+  - Implemented real-time messaging using native WebSocket (`ws`) to remain strictly backwards compatible.
+  - Fetched message history using `/api/messages/:friendId`.
+- **Phase 1 (Page 7): Profile Page**
+  - Created dedicated profile overview component displaying known and wanted skills.
+- **Phase 1 (Page 8): Video Call Page**
+  - Implemented WebRTC signaling over WebSockets (`webrtc-signal`).
+  - Styled a modern PiP (Picture-in-Picture) video interface.
+
+## Pending Tasks
+- **Phase 2 (Page 9): Course & Learning Dashboard** (Starting Phase 2)
 - Phases 11-20 (Advanced Enhancements)
 
 ## Folder Structure Changes
 ```
 client/src/pages/
+  ├── Chat.jsx
+  ├── Community.jsx
   ├── Dashboard.jsx
   ├── Home.jsx
   ├── Login.jsx
-  └── Register.jsx
+  ├── Profile.jsx
+  ├── Register.jsx
+  └── VideoCall.jsx
 server/
   ├── config/db.js
   ├── controllers/authController.js, userController.js
@@ -65,3 +79,4 @@ server/
 - Register Page: `4a381d5` (page-2-register branch)
 - Home Page: `40ee778` (page-3-home branch)
 - Dashboard Page: `66acd5c` (page-4-dashboard branch)
+- Community, Chat, Profile, Video Call: `(phase-1-final)`

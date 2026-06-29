@@ -5,5 +5,8 @@ const auth = require('../middleware/auth');
 
 router.get('/profile', auth, userController.getProfile);
 router.get('/matches', auth, userController.getMatches);
+router.get('/users', auth, userController.getUsers);
+router.post('/friends/request/:id', auth, userController.sendFriendRequest);
+router.post('/friends/accept/:id', auth, userController.acceptFriendRequest);
 
 module.exports = router;

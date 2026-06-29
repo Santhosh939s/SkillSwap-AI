@@ -55,6 +55,9 @@ const Dashboard = () => {
                     <div className="flex items-center space-x-4">
                         <span className="text-gray-700">Welcome, {profile?.name}!</span>
                         <Link to="/community" className="text-blue-600 hover:text-blue-800 font-medium">Community</Link>
+                        <Link to="/chat" className="text-blue-600 hover:text-blue-800 font-medium">Chat</Link>
+                        <Link to="/video-call" className="text-blue-600 hover:text-blue-800 font-medium">Video Call</Link>
+                        <Link to="/profile" className="text-blue-600 hover:text-blue-800 font-medium">Profile</Link>
                         <button onClick={logout} className="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 text-sm font-medium">Logout</button>
                     </div>
                 </div>
@@ -147,12 +150,13 @@ const Dashboard = () => {
                             )}
                         </section>
 
-                        {/* Friends & Chat Placeholder */}
-                        <section className="bg-white p-6 rounded-lg shadow opacity-75">
-                            <h3 className="text-lg font-bold mb-4 text-gray-700">Friends & Chat (Phase 1 - Chat Page)</h3>
-                            <div className="p-4 bg-gray-100 rounded text-center border-dashed border-2 border-gray-300">
-                                <p className="text-sm text-gray-500 mb-2">You have {profile?.friends?.length || 0} friends.</p>
-                                <p className="text-xs text-gray-400">Real-time Socket.IO chat will be built in Page 6.</p>
+                        {/* Friends & Chat Link */}
+                        <section className="bg-white p-6 rounded-lg shadow">
+                            <h3 className="text-lg font-bold mb-4 text-gray-700">Friends & Chat</h3>
+                            <div className="p-4 bg-gray-50 rounded text-center border">
+                                <p className="text-sm text-gray-600 mb-4">You have {profile?.friends?.length || 0} friends.</p>
+                                <Link to="/chat" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-medium mr-2">Open Chat</Link>
+                                <Link to="/video-call" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 font-medium">Start Video Call</Link>
                             </div>
                         </section>
                     </div>

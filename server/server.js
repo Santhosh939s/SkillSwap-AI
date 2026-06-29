@@ -83,47 +83,6 @@ app.use('/api', userRoutes); // mounts /api/profile and /api/matches
 
 // Legacy Routes (To be migrated in future phases)
 
-app.get('/api/users', auth, async (req, res) => {
-    try {
-        const users = await User.find().select('name skillsKnown skillsWanted location profilePicture');
-        res.json(users);
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
-
-app.post('/api/friends/request/:id', auth, async (req, res) => {
-    try {
-        const recipient = await User.findById(req.params.id);
-        if (!recipient.friendRequests.includes(req.user.id)) {
-            recipient.friendRequests.push(req.user.id);
-            await recipient.save();
-        }
-        res.json({ msg: 'Friend request sent' });
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
-
-app.post('/api/friends/accept/:id', auth, async (req, res) => {
-    try {
-        const requesterId = req.params.id;
-        const currentUser = await User.findById(req.user.id);
-        
-        currentUser.friends.push(requesterId);
-        currentUser.friendRequests = currentUser.friendRequests.filter(id => id.toString() !== requesterId);
-        await currentUser.save();
-        
-        const requester = await User.findById(requesterId);
-        requester.friends.push(req.user.id);
-        await requester.save();
-
-        res.json({ msg: 'Friend added' });
-    } catch (err) {
-        res.status(500).send('Server Error');
-    }
-});
-
 app.get('/api/messages/:friendId', auth, async (req, res) => {
     try {
         const friendId = req.params.friendId;
